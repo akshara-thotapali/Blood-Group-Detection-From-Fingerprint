@@ -101,7 +101,7 @@ Ensure that **Anaconda** is installed before proceeding.
 ## 1. Clone the Repository
 
 ```bash id="2csmjd"
-git clone https://github.com/<your-github-username>/Blood-Group-Detection.git
+git clone https://github.com/MandeepKharb/Blood-Group-Detection.git
 
 cd Blood-Group-Detection
 ```
