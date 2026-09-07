@@ -1,240 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Group Detection From Fingerprint</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 30px;
-            color: #333;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .form-section, .result-section {
-            width: 100%;
-            max-width: 600px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .form-section h2, .result-section h2 {
-            text-align: center;
-            color: #007BFF;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .form-group input, 
-        .form-group select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .form-group input[type="file"] {
-            font-size: 14px;
-        }
-
-        .preview-container {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .preview-container img {
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            display: none;
-			margin: 0 auto; /* Center-align the image */
-			margin-bottom: 25px;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            display: block;
-            margin: 0 auto;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .result-section table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .result-section table th, 
-        .result-section table td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .result-section table th {
-            background-color: #007BFF;
-            color: #fff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blood Group Detection From Fingerprint | AI Analysis</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    <h1>Blood Group Detection From Fingerprint</h1>
 
-    <div class="container">
-        <div class="form-section">
-            <h2>Enter Details</h2>
-            <form id="bloodGroupForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" placeholder="Enter your name" required>
-                </div>
-                <div class="form-group">
-                    <label for="mobile">Mobile</label>
-                    <input type="tel" id="mobile" placeholder="Enter your mobile number" pattern="[0-9]{10}" required>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <select id="gender" required>
-                        <option value="" disabled selected>Select your gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <select id="age" required>
-    <option value="" disabled selected>Select your age</option>
-    <!-- Age range -->
-    <script>
-        for (let i = 1; i <= 100; i++) {
-            document.write(`<option value="${i}">${i}</option>`);
-        }
-    </script>
-</select>
+  <!-- GLOBAL NAVIGATION HEADER -->
+  <header class="app-header">
+    <nav class="navbar">
+      <a href="#home" class="nav-brand">
+        <div class="brand-icon">
+          <i class="fas fa-fingerprint"></i>
+        </div>
+        <span>HemoPrint <span style="color: var(--accent-blue);">AI</span></span>
+      </a>
 
-                </div>
-                <div class="form-group">
-                    <label for="fingerprint">Upload Fingerprint</label>
-                    <input type="file" id="fingerprint" accept="image/*" onchange="previewFingerprint()" required>
-                </div>
-                <div class="preview-container">
-                    <img id="fingerprintPreview" alt="Fingerprint Preview">
-                </div>
-                <button type="button" onclick="submitDetails()">Detect Blood Group</button>
-            </form>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#detect" class="nav-link">Detection</a></li>
+        <li><a href="#history" class="nav-link">History</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="#detect" class="nav-cta">Detect Now</a></li>
+      </ul>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+  </header>
+
+  <!-- MAIN APP CONTAINER (SPA VIEWS) -->
+  <main class="app-content">
+
+    <!-- ===================================================================
+         PAGE 1 — HOME VIEW
+         =================================================================== -->
+    <section class="page-view active" id="home-page">
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-sparkles"></i> Deep Learning Biometric Technology
+          </div>
+          <h1 class="hero-title">Blood Group Detection From Fingerprint</h1>
+          <div class="hero-subtitle">AI-Powered Fingerprint Analysis</div>
+          <p class="hero-desc">
+            Explore a deep learning based approach for non-invasive fingerprint analysis and blood group classification.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#detect" class="btn-primary">
+              <i class="fas fa-microscope"></i> Detect Blood Group
+            </a>
+            <a href="#how-it-works" class="btn-secondary">
+              <i class="fas fa-info-circle"></i> How It Works
+            </a>
+          </div>
+
+          <div class="disclaimer-box">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div>
+              <strong>Educational Disclaimer:</strong> This project is developed for educational and research purposes and is not a substitute for laboratory blood-group testing.
+            </div>
+          </div>
         </div>
 
-        <div class="result-section" id="resultSection" style="display: none;">
-            <h2>Detection Result</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody id="resultTableBody"></tbody>
-            </table>
+        <div class="hero-visual">
+          <div class="visual-card">
+            <div class="visual-icon-ring">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-2.05.78-3.91 2.05-5.32l11.27 11.27C15.91 19.22 14.05 20 12 20zm6.95-3.68L7.68 5.05C9.09 3.78 10.95 3 13 3c4.41 0 8 3.59 8 8 0 2.05-.78 3.91-2.05 5.32z"/>
+              </svg>
+            </div>
+            <h3 class="visual-card-title">AI Biometric Analysis</h3>
+            <p class="visual-card-sub">Convolutional Neural Networks for Pattern Classification</p>
+            <div class="visual-badges">
+              <span class="v-badge"><i class="fas fa-check"></i> CNN Model</span>
+              <span class="v-badge"><i class="fas fa-bolt"></i> Real-time</span>
+              <span class="v-badge"><i class="fas fa-lock"></i> Client Privacy</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Key Features Section -->
+      <div class="section-header" style="margin-top: 3rem;">
+        <span class="section-tag">Key Features</span>
+        <h2 class="section-title">Why Fingerprint Blood Group Analysis?</h2>
+        <p class="section-subtitle">A modern exploratory approach connecting physiological biometrics with artificial intelligence.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
+          <h3 class="feature-title">Biometric Pattern Recognition</h3>
+          <p class="feature-desc">Analyzes ridge patterns, loops, and whorls using spatial image filtering.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-brain"></i></div>
+          <h3 class="feature-title">Deep CNN Classification</h3>
+          <p class="feature-desc">Trained neural network evaluating complex visual feature representations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3 class="feature-title">Instant Predictions</h3>
+          <p class="feature-desc">Generates immediate blood type estimation directly through the Flask backend.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="feature-title">Non-Invasive Research</h3>
+          <p class="feature-desc">Provides a completely digital experience without blood sampling equipment.</p>
+        </div>
+      </div>
+
+      <!-- CTA Banner -->
+      <div class="cta-banner">
+        <h2>Ready to Detect Blood Group from Fingerprint?</h2>
+        <p>Experience artificial intelligence in biometric identification with our modern upload portal.</p>
+        <a href="#detect" class="btn-primary" style="background: #ffffff; color: var(--primary-navy);">
+          <i class="fas fa-play"></i> Start Detection Now
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 2 — BLOOD GROUP DETECTION VIEW
+         =================================================================== -->
+    <section class="page-view" id="detect-page">
+      <div class="section-header">
+        <span class="section-tag">AI Portal</span>
+        <h2 class="section-title">Blood Group Detection</h2>
+        <p class="section-subtitle">Upload a fingerprint image to generate a prediction.</p>
+      </div>
+
+      <div class="detection-container">
+        <!-- Panel 1: Input & Upload -->
+        <div class="card">
+          <div class="panel-header">
+            <i class="fas fa-user-edit"></i>
+            <h3>Enter Details & Upload</h3>
+          </div>
+
+          <form id="detectionForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="patientName" class="form-label">Full Name</label>
+                <input type="text" id="patientName" class="form-control" placeholder="e.g. John Doe" required />
+              </div>
+              <div class="form-group">
+                <label for="patientMobile" class="form-label">Mobile Number</label>
+                <input type="tel" id="patientMobile" class="form-control" placeholder="10-digit mobile" pattern="[0-9]{10}" required />
+              </div>
+              <div class="form-group">
+                <label for="patientGender" class="form-label">Gender</label>
+                <select id="patientGender" class="form-control" required>
+                  <option value="" disabled selected>Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="patientAge" class="form-label">Age</label>
+                <select id="patientAge" class="form-control" required>
+                  <option value="" disabled selected>Select age</option>
+                  <script>
+                    for (let i = 1; i <= 100; i++) {
+                      document.write(`<option value="${i}">${i}</option>`);
+                    }
+                  </script>
+                </select>
+              </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="form-group-full">
+              <label class="form-label">Fingerprint Image</label>
+              <div class="dropzone" id="dropzone">
+                <div class="dropzone-icon">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="dropzone-text">Drag & Drop Image Here</div>
+                <div class="dropzone-sub">or click to browse from device (PNG, JPG, BMP)</div>
+                <button type="button" class="btn-secondary" style="pointer-events: none; margin-top: 0.5rem;">
+                  <i class="fas fa-folder-open"></i> Browse Image
+                </button>
+                <input type="file" id="fingerprintInput" class="file-input-hidden" accept="image/*" />
+              </div>
+
+              <!-- File Preview Card -->
+              <div class="preview-card" id="previewCard">
+                <img id="previewThumb" class="preview-thumb" alt="Fingerprint Preview" />
+                <div class="preview-details">
+                  <div class="preview-name" id="previewName">filename.jpg</div>
+                  <div class="preview-size" id="previewSize">0 KB</div>
+                </div>
+                <button type="button" class="btn-remove" id="btnRemoveImage">
+                  <i class="fas fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btnAnalyze" style="width: 100%; margin-top: 1.5rem; justify-content: center;">
+              <i class="fas fa-microscope"></i> Analyze Fingerprint
+            </button>
+          </form>
+        </div>
+
+        <!-- Panel 2: Result Card / States -->
+        <div class="card result-wrapper">
+          <div class="panel-header">
+            <i class="fas fa-chart-pie"></i>
+            <h3>Prediction Results</h3>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-result-state" id="emptyResultState">
+            <i class="fas fa-fingerprint"></i>
+            <h4>No Image Analyzed Yet</h4>
+            <p>Upload a fingerprint image and click Analyze to view predictions here.</p>
+          </div>
+
+          <!-- Loading Spinner State -->
+          <div class="loading-state" id="loadingState">
+            <div class="spinner-custom"></div>
+            <h4 style="color: var(--primary-navy); margin-bottom: 0.5rem;">Processing Fingerprint Image...</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Extracting features and querying deep learning model.</p>
+          </div>
+
+          <!-- Active Result Card -->
+          <div class="result-card" id="resultCard">
+            <div class="result-card-header">
+              <h4>Detected Blood Group</h4>
+              <div class="blood-group-badge" id="resBloodGroup">A+</div>
+              
+              <div class="confidence-bar-wrapper">
+                <div class="confidence-label" id="resConfidenceText">Confidence: --%</div>
+                <div class="confidence-track">
+                  <div class="confidence-fill" id="resConfidenceFill"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="result-card-body">
+              <table class="result-detail-table">
+                <tbody id="resTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+
+              <button type="button" class="btn-secondary" id="btnAnalyzeAnother" style="width: 100%; justify-content: center;">
+                <i class="fas fa-redo"></i> Analyze Another Fingerprint
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 3 — PREDICTION HISTORY VIEW
+         =================================================================== -->
+    <section class="page-view" id="history-page">
+      <div class="history-header">
+        <div>
+          <span class="section-tag">Dashboard</span>
+          <h2 class="section-title" style="margin-bottom: 0;">Prediction History</h2>
+        </div>
+        <button class="btn-danger-outline" id="btnClearHistory" style="display: none;">
+          <i class="fas fa-trash-alt"></i> Clear History
+        </button>
+      </div>
+
+      <!-- History Table Wrapper -->
+      <div class="table-responsive" id="historyTableWrapper" style="display: none;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Patient Info</th>
+              <th>Fingerprint</th>
+              <th>Predicted Group</th>
+              <th>Confidence</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Dynamically populated from localStorage -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty History State -->
+      <div class="card empty-history-state" id="emptyHistoryState">
+        <i class="fas fa-history"></i>
+        <h3>No Predictions Yet</h3>
+        <p>Your analyzed fingerprints will appear here automatically.</p>
+        <a href="#detect" class="btn-primary" style="margin-top: 1.5rem;">
+          <i class="fas fa-plus"></i> Perform First Detection
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 4 — HOW IT WORKS VIEW
+         =================================================================== -->
+    <section class="page-view" id="how-it-works-page">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Understanding the 4-step pipeline behind fingerprint blood group classification.</p>
+      </div>
+
+      <!-- 4-Step Workflow -->
+      <div class="workflow-steps">
+        <div class="step-card">
+          <span class="step-num">01</span>
+          <div class="step-icon"><i class="fas fa-upload"></i></div>
+          <h3 class="step-title">1. Image Upload</h3>
+          <p class="step-desc">The user submits a fingerprint image (PNG, JPG, BMP) via the dashboard interface.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">02</span>
+          <div class="step-icon"><i class="fas fa-sliders-h"></i></div>
+          <h3 class="step-title">2. Preprocessing</h3>
+          <p class="step-desc">The image is resized to 64x64 pixels, normalized, and converted into a numerical tensor array.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">03</span>
+          <div class="step-icon"><i class="fas fa-network-wired"></i></div>
+          <h3 class="step-title">3. Deep Learning</h3>
+          <p class="step-desc">The trained Convolutional Neural Network extracts feature maps from ridge patterns.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-num">04</span>
+          <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+          <h3 class="step-title">4. Prediction</h3>
+          <p class="step-desc">The model outputs class probabilities for A+, A-, B+, B-, AB+, AB-, O+, and O-.</p>
+        </div>
+      </div>
+
+      <!-- Technology Stack Cards -->
+      <div class="section-header" style="margin-top: 4rem;">
+        <span class="section-tag">Stack Overview</span>
+        <h2 class="section-title">Technology Behind the Project</h2>
+        <p class="section-subtitle">Built with reliable open-source frameworks and libraries.</p>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <i class="fab fa-python"></i>
+          <h4>Python</h4>
+          <p>Core Runtime</p>
+        </div>
+        <div class="tech-card">
+          <i class="fas fa-cube"></i>
+          <h4>TensorFlow / Keras</h4>
+          <p>Deep Learning</p>
+        </div>
+        <div class="tech-card">
+          <i class="fas fa-server"></i>
+          <h4>Flask</h4>
+          <p>Web Framework</p>
+        </div>
+        <div class="tech-card">
+          <i class="fas fa-eye"></i>
+          <h4>OpenCV</h4>
+          <p>Computer Vision</p>
+        </div>
+        <div class="tech-card">
+          <i class="fab fa-html5"></i>
+          <h4>HTML5 / CSS3 / JS</h4>
+          <p>Modern Frontend</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 5 — ABOUT VIEW
+         =================================================================== -->
+    <section class="page-view" id="about-page">
+      <div class="section-header">
+        <span class="section-tag">Information</span>
+        <h2 class="section-title">About the Project</h2>
+        <p class="section-subtitle">Explore the motivation, scope, and technical background.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-main-card">
+          <div class="about-section-block">
+            <h3><i class="fas fa-bullseye"></i> Problem Statement</h3>
+            <p>
+              Traditional blood grouping requires invasive serological blood sampling via finger pricks or venipuncture. This project explores whether physiological dermal patterns in fingerprints carry correlations suitable for non-invasive machine learning classification.
+            </p>
+          </div>
+
+          <div class="about-section-block">
+            <h3><i class="fas fa-lightbulb"></i> Objective</h3>
+            <p>
+              To construct a prototype deep neural network pipeline capable of processing fingerprint images and classifying predicted blood group labels with confidence scores.
+            </p>
+          </div>
+
+          <div class="about-section-block">
+            <h3><i class="fas fa-cogs"></i> Approach</h3>
+            <p>
+              Fingerprint scans are preprocessed into normalized 64x64 tensors and passed through a Convolutional Neural Network (CNN) model trained on annotated fingerprint datasets.
+            </p>
+          </div>
+
+          <div class="about-section-block">
+            <h3><i class="fas fa-exclamation-circle"></i> Project Limitations</h3>
+            <p>
+              Predictions depend heavily on image clarity, lighting, sensor calibration, and dataset diversity. This software is an academic exploratory project and must never replace clinical diagnostics.
+            </p>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3 style="font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.75rem;">
+            Metadata Summary
+          </h3>
+          <ul class="info-list">
+            <li class="info-item">
+              <div class="info-label">Project Type</div>
+              <div class="info-val">B.Tech Minor Project</div>
+            </li>
+            <li class="info-item">
+              <div class="info-label">Domain</div>
+              <div class="info-val">AI • Deep Learning • Computer Vision</div>
+            </li>
+            <li class="info-item">
+              <div class="info-label">Architecture</div>
+              <div class="info-val">Convolutional Neural Network</div>
+            </li>
+            <li class="info-item">
+              <div class="info-label">Backend Stack</div>
+              <div class="info-val">Python / Flask API</div>
+            </li>
+          </ul>
+
+          <div class="disclaimer-box" style="margin-top: 1.5rem;">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <strong>Disclaimer:</strong> Fingerprint-based blood group prediction should not be considered a clinically validated method for determining blood type.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PAGE 6 — CONTACT US VIEW
+         =================================================================== -->
+    <section class="page-view" id="contact-page">
+      <div class="section-header">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-title">Contact Us</h2>
+        <p class="section-subtitle">Have a question or feedback about the project?</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="card">
+          <div class="toast-notification" id="contactToast">
+            <i class="fas fa-check-circle"></i> Message recorded in demo mode. Thank you for reaching out!
+          </div>
+
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="contactName" class="form-label">Your Name</label>
+                <input type="text" id="contactName" class="form-control" placeholder="Enter your name" required />
+              </div>
+              <div class="form-group">
+                <label for="contactEmail" class="form-label">Email Address</label>
+                <input type="email" id="contactEmail" class="form-control" placeholder="Enter your email" required />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="contactSubject" class="form-label">Subject</label>
+              <input type="text" id="contactSubject" class="form-control" placeholder="Project Inquiry / Feedback" required />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label for="contactMessage" class="form-label">Message</label>
+              <textarea id="contactMessage" class="form-control" rows="5" placeholder="Write your message here..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+
+        <div class="sidebar-card">
+          <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Project Information</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+            This software was created as a B.Tech Minor Project investigating computer vision applications in biological biometric patterns.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div class="brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem;"><i class="fas fa-graduation-cap"></i></div>
+              <div>
+                <strong style="font-size: 0.9rem;">Academic Category</strong>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">B.Tech Minor Project</div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div class="brand-icon" style="width: 32px; height: 32px; font-size: 0.9rem;"><i class="fas fa-code-branch"></i></div>
+              <div>
+                <strong style="font-size: 0.9rem;">Domain Focus</strong>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">AI • Deep Learning • Computer Vision</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GLOBAL FOOTER -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <h3>HemoPrint AI</h3>
+          <p>
+            An exploratory artificial intelligence application classifying blood group probabilities using fingerprint biometric pattern recognition.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#detect">Blood Group Detection</a></li>
+            <li><a href="#history">Prediction History</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Information</h4>
+          <ul>
+            <li><a href="#about">About Project</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 HemoPrint AI — B.Tech Minor Project. Educational Research Purpose Only.</div>
+        <div>Not clinically validated for medical diagnostics.</div>
+      </div>
     </div>
+  </footer>
 
-    <script>
-        function previewFingerprint() {
-            const fileInput = document.getElementById('fingerprint');
-            const previewImage = document.getElementById('fingerprintPreview');
-            const file = fileInput.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    previewImage.src = reader.result;
-                    previewImage.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function submitDetails() {
-            const name = document.getElementById('name').value;
-            const mobile = document.getElementById('mobile').value;
-            const gender = document.getElementById('gender').value;
-            const age = document.getElementById('age').value;
-            const fingerprintInput = document.getElementById('fingerprint');
-            const fingerprintFile = fingerprintInput.files[0];
-
-            if (!name || !mobile || !gender || !age || !fingerprintFile) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const formData = new FormData();
-           
-            formData.append('file', fingerprintFile);
-
-            fetch('/predict', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const resultSection = document.getElementById('resultSection');
-                const resultTableBody = document.getElementById('resultTableBody');
-
-                resultTableBody.innerHTML = `
-                    <tr><td>Name</td><td>${name}</td></tr>
-                    <tr><td>Mobile</td><td>${mobile}</td></tr>
-                    <tr><td>Gender</td><td>${gender}</td></tr>
-                    <tr><td>Age</td><td>${age}</td></tr>
-                    <tr><td>Fingerprint</td><td><img src="${document.getElementById('fingerprintPreview').src}" style="max-width: 100px;"/></td></tr>
-                    <tr><td>Confidence</td><td>${data.confidence}</td></tr>
-                    <tr><td>Blood Group</td><td>${data.predicted_label}</td></tr>
-                `;
-
-                resultSection.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-        }
-    </script>
+  <!-- Application Logic JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
