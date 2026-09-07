@@ -16,12 +16,6 @@ Users can upload a fingerprint image through the web interface, and the trained 
 
 ---
 
-# 🎬 Project Demonstration
-
-*https://youtu.be/_CPJoDdniB8?si=rBDFrmcS4lGQcUQd*
-
----
-
 # ✨ Features
 
 * 🩸 Blood group prediction from fingerprint images
