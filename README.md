@@ -107,21 +107,3 @@ Blood-Group-Detection/
 * Batch fingerprint analysis
 
 ---
-
-# 🤝 Contributions
-
-Contributions, feature requests, and improvements are welcome. Feel free to fork the repository and submit a Pull Request.
-
----
-
-# 👨‍💻 Author
-
-**Mandeep Kharb**
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
-
----
-
-# 📄 License
-
-This project is intended for educational, research, and learning purposes only. It should not be used for clinical diagnosis, medical decision-making, or laboratory blood typing.
