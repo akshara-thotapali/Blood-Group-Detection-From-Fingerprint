@@ -72,21 +72,6 @@ Users can upload a fingerprint image through the web interface, and the trained 
 
 ---
 
-# 📂 Project Structure
-
-```text id="5nh3jc"
-Blood-Group-Detection/
-│
-├── model/
-├── static/
-├── templates/
-├── app.py
-├── requirements.txt
-├── README.md
-└── ...
-```
-
----
 
 
 # 🔮 Future Enhancements
